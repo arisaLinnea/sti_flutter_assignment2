@@ -1,25 +1,23 @@
 part of 'vehicle_bloc.dart';
 
 // Define the States
-abstract class VehicleState extends Equatable {}
+abstract class VehicleState extends Equatable {
+  late final List<Vehicle> vehicleList;
 
-class VehicleInitial extends VehicleState {
   @override
   List<Object?> get props => [];
 }
 
-class VehicleLoading extends VehicleState {
-  @override
-  List<Object?> get props => [];
-}
+class VehicleInitial extends VehicleState {}
+
+class VehicleLoading extends VehicleState {}
 
 class VehicleLoaded extends VehicleState {
-  final List<Vehicle> vehicles;
-
-  VehicleLoaded({required this.vehicles});
-
+  VehicleLoaded({required vehicles}) {
+    vehicleList = vehicles;
+  }
   @override
-  List<Object?> get props => [vehicles];
+  List<Object?> get props => [vehicleList];
 }
 
 class VehicleSuccess extends VehicleState {

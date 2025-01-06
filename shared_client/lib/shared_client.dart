@@ -9,4 +9,7 @@ export 'src/repositories/user_login_repository.dart';
 export 'src/repositories/owner_repository.dart';
 export 'src/repositories/vehicle_repository.dart';
 
+export 'src/blocs/parking/parking_bloc.dart';
+export 'src/blocs/parkinglot/parking_lot_bloc.dart';
+
 // TODO: Export any libraries intended for clients of this package.

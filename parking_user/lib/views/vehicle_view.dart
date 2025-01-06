@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:parking_user/blocs/auth/auth_bloc.dart';
 import 'package:parking_user/blocs/vehicle/vehicle_bloc.dart';
+import 'package:parking_user/utils/utils.dart';
 import 'package:parking_user/widgets/vehicle_widget.dart';
 
 class VehicleView extends StatefulWidget {
@@ -15,34 +17,51 @@ class _VehicleViewState extends State<VehicleView> {
   @override
   void initState() {
     super.initState();
+
+    final authState = context.read<AuthBloc>().state;
+    //if (authState is AuthAuthenticatedState) {
+    final owner = authState.user;
+    print('owner: $owner');
+    // If the user is authenticated, load vehicles
+    context.read<VehicleBloc>().add(LoadVehiclesEvent());
+    // }
     // Owner? owner = Provider.of<AuthState>(context, listen: false).userInfo;
     // context.read<VehicleListProvider>().setOwner(owner);
-    context.read<VehicleBloc>().add(LoadVehiclesEvent());
+    // context.read<VehicleBloc>().add(LoadVehiclesEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('My vehicles')),
-      body: BlocBuilder<VehicleBloc, VehicleState>(
+      body: BlocListener<VehicleBloc, VehicleState>(listener: (context, state) {
+        print('vehicleState view listener: $state');
+        if (state is VehicleSuccess) {
+          Utils.toastMessage(state.message);
+        }
+        if (state is VehicleFailure) {
+          Utils.toastMessage(state.error);
+        }
+      }, child: BlocBuilder<VehicleBloc, VehicleState>(
         builder: (context, state) {
+          print('authState vehicle builder: $state');
           // Show a loading indicator when vehicles are loading
           if (state is VehicleLoading) {
             return const Center(child: CircularProgressIndicator());
           }
 
           // Show a message if there are no vehicles
-          if (state is VehicleLoaded && state.vehicles.isEmpty) {
+          if (state is VehicleLoaded && state.vehicleList.isEmpty) {
             return const Center(child: Text('No vehicles available.'));
           }
 
           // Show the list of vehicles when they are loaded
           if (state is VehicleLoaded) {
             return ListView.builder(
-              itemCount: state.vehicles.length,
+              itemCount: state.vehicleList.length,
               itemBuilder: (context, index) {
                 return VehicleWidget(
-                  item: state.vehicles[index],
+                  item: state.vehicleList[index],
                   number: index + 1,
                 );
               },
@@ -57,7 +76,7 @@ class _VehicleViewState extends State<VehicleView> {
           // Default case to handle unexpected state
           return const Center(child: Text('Unknown state'));
         },
-      ),
+      )),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Add new vehicle',
         onPressed: () {

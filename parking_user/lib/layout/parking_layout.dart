@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:parking_user/providers/auth_state.dart';
+import 'package:parking_user/blocs/auth/auth_bloc.dart';
 import 'package:parking_user/providers/theme_provider.dart';
 import 'package:parking_user/routes/navigation.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +22,7 @@ class ParkingLayout extends StatelessWidget {
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.person),
-              onPressed: () => context.read<AuthState>().logout(),
+              onPressed: () => context.read<AuthBloc>().add(AuthLogoutEvent()),
             ),
             IconButton(
               icon: const Icon(Icons.brightness_6),

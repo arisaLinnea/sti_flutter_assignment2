@@ -2,7 +2,9 @@ part of 'vehicle_bloc.dart';
 
 class VehicleEvent {}
 
-class LoadVehiclesEvent extends VehicleEvent {}
+class LoadVehiclesEvent extends VehicleEvent {
+  LoadVehiclesEvent();
+}
 
 class RemoveVehicleEvent extends VehicleEvent {
   final String vehicleId;
@@ -14,4 +16,10 @@ class AddVehicleEvent extends VehicleEvent {
   final Vehicle vehicle;
 
   AddVehicleEvent({required this.vehicle});
+}
+
+class EditVehicleEvent extends VehicleEvent {
+  final Vehicle vehicle;
+
+  EditVehicleEvent({required this.vehicle});
 }
