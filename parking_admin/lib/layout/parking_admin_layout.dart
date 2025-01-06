@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:parking_admin/providers/auth_provider.dart';
+import 'package:parking_admin/blocs/auth/auth_bloc.dart';
 import 'package:parking_admin/providers/theme_provider.dart';
 import 'package:parking_admin/routes/navigation.dart';
 import 'package:parking_admin/views/home_view.dart';
@@ -34,7 +34,8 @@ class ParkingAdminLayout extends StatelessWidget {
                   child: Column(children: [
                     IconButton(
                       icon: const Icon(Icons.person),
-                      onPressed: () => context.read<AuthState>().logout(),
+                      onPressed: () =>
+                          context.read<AuthBloc>().add(AuthLogoutEvent()),
                     ),
                     IconButton(
                       icon: const Icon(Icons.brightness_6),

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:parking_user/providers/parking_provider.dart';
-import 'package:parking_user/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:shared/shared.dart';
 import 'package:shared_client/shared_client.dart';
@@ -48,18 +46,6 @@ class ParkingWidget extends StatelessWidget {
                             context
                                 .read<ParkingBloc>()
                                 .add(EditParkingEvent(parking: item));
-                            // bool success = await ParkingRepository()
-                            //     .update(id: id, item: item);
-
-                            // if (success) {
-                            //   Utils.toastMessage('Parking ended');
-                            // } else {
-                            //   Utils.toastMessage(
-                            //       'Failed to stop parking. Please try again');
-                            // }
-                            // if (context.mounted) {
-                            //   context.read<ParkingProvider>().fetchParkings();
-                            // }
                           },
                         ),
                       ],
