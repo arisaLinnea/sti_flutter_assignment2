@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:parking_admin/providers/parking_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared/shared.dart';
 import 'package:shared_client/shared_client.dart';
 
@@ -30,28 +29,31 @@ class ParkingLotWidget extends StatelessWidget {
                   TextButton(
                     child: const Text('Remove'),
                     onPressed: () async {
-                      bool success =
-                          await ParkingLotRepository().remove(id: item.id);
-                      if (success) {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Parking lot removed'),
-                            ),
-                          );
-                        }
-                      } else {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Failed to remove parking lot'),
-                            ),
-                          );
-                        }
-                      }
-                      if (context.mounted) {
-                        context.read<ParkingProvider>().updateParkingsLots();
-                      }
+                      context
+                          .read<ParkingLotBloc>()
+                          .add(RemoveParkingLotEvent(lotId: item.id));
+                      // bool success =
+                      //     await ParkingLotRepository().remove(id: item.id);
+                      // if (success) {
+                      //   if (context.mounted) {
+                      //     ScaffoldMessenger.of(context).showSnackBar(
+                      //       const SnackBar(
+                      //         content: Text('Parking lot removed'),
+                      //       ),
+                      //     );
+                      //   }
+                      // } else {
+                      //   if (context.mounted) {
+                      //     ScaffoldMessenger.of(context).showSnackBar(
+                      //       const SnackBar(
+                      //         content: Text('Failed to remove parking lot'),
+                      //       ),
+                      //     );
+                      //   }
+                      // }
+                      // if (context.mounted) {
+                      //   context.read<ParkingProvider>().updateParkingsLots();
+                      // }
                     },
                   ),
                 ],

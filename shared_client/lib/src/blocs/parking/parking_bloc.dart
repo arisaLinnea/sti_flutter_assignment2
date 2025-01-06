@@ -84,4 +84,58 @@ class ParkingBloc extends Bloc<ParkingEvent, ParkingState> {
         .toList();
     return endedParkings;
   }
+
+  List<ParkingLot> getPopularParkingLots() {
+    if (_parkings.isEmpty) return [];
+
+    Map<String, int> parkingLotCount = {};
+
+    for (var parking in _parkings) {
+      var lotId = parking.parkinglot?.id;
+      if (lotId != null) {
+        parkingLotCount[lotId] = (parkingLotCount[lotId] ?? 0) + 1;
+      }
+    }
+    // Find the maximum occurrence
+    int maxCount = parkingLotCount.values.isEmpty
+        ? 0
+        : parkingLotCount.values.reduce((a, b) => a > b ? a : b);
+
+    // Get all parking lots with the max occurrence
+    List<String> maxIds = [];
+    parkingLotCount.forEach((lot, count) {
+      if (count == maxCount) {
+        maxIds.add(lot);
+      }
+    });
+    // List<ParkingLot> mostCommon =
+    //     _parkingsLots.where((lot) => maxIds.contains(lot.id)).toList();
+    List<ParkingLot> mostCommon = _parkings
+        .where((parking) => maxIds.contains(parking.parkinglot?.id))
+        .map((parking) => parking.parkinglot)
+        .whereType<
+            ParkingLot>() // Ensures we only get non-null ParkingLot objects
+        .toSet() // Removes duplicates (compare operator== needed in ParkingLot)
+        .toList();
+
+    return mostCommon;
+  }
+
+  double getSumParkings() {
+    double sumParking = 0;
+    DateTime now = DateTime.now();
+    for (var parking in _parkings) {
+      if (parking.endTime != null &&
+          parking.endTime!.isBefore(now) &&
+          parking.parkinglot?.hourlyPrice != null) {
+        Duration differenceTime =
+            parking.endTime!.difference(parking.startTime);
+        int minutes = differenceTime.inMinutes;
+        int startedHours = (minutes / 60).ceil();
+        double cost = parking.parkinglot!.hourlyPrice * startedHours;
+        sumParking += cost;
+      }
+    }
+    return sumParking;
+  }
 }

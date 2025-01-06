@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:parking_admin/providers/auth_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:parking_admin/blocs/auth/auth_bloc.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -11,95 +11,117 @@ class LoginView extends StatelessWidget {
     final ValueNotifier<bool> passwordNotifier = ValueNotifier(true);
     final usernameFocus = FocusNode();
     final passwordFocus = FocusNode();
-    final authService = context.watch<AuthState>();
+    // final authService = context.watch<AuthState>();
+    final authState = context.watch<AuthBloc>().state;
 
     // Request focus only when not authenticating
-    if (authService.status == AuthStatus.unauthorized) {
+    if (authState is AuthUnauthorizedState) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         usernameFocus.requestFocus();
       });
     }
 
-    return Center(
-      child: Form(
-        key: formKey,
-        child: Container(
-          constraints: const BoxConstraints(maxWidth: 400),
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Welcome Back',
-                style: Theme.of(context).textTheme.headlineLarge,
+    return BlocListener<AuthBloc, AuthState>(
+        listener: (context, authState) {
+          if (authState is AuthAuthenticatedState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Login Successful'),
               ),
-              const SizedBox(height: 32),
-              TextFormField(
-                focusNode: usernameFocus,
-                enabled: authService.status != AuthStatus.loading,
-                decoration: const InputDecoration(
-                  labelText: 'Username',
-                  prefixIcon: Icon(Icons.person),
-                ),
-                validator: (value) =>
-                    value?.isEmpty ?? true ? 'Please enter a username' : null,
-                onFieldSubmitted: (_) => passwordFocus.requestFocus(),
+            );
+          }
+
+          if (authState is AuthFailedState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Login Failed'),
               ),
-              const SizedBox(height: 16),
-              ValueListenableBuilder(
-                valueListenable: passwordNotifier,
-                builder: (_, passwordObscure, __) {
-                  return TextFormField(
-                    focusNode: passwordFocus,
-                    obscureText: passwordObscure,
-                    enabled: authService.status != AuthStatus.loading,
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                          onPressed: () =>
-                              passwordNotifier.value = !passwordObscure,
-                          style: IconButton.styleFrom(
-                            minimumSize: const Size.square(48),
-                          ),
-                          icon: Icon(
-                            passwordObscure
-                                ? Icons.visibility_off_outlined
-                                : Icons.visibility_outlined,
-                            size: 20,
-                            color: Colors.black,
-                          )),
-                      labelText: 'Password',
-                      prefixIcon: const Icon(Icons.lock),
+            );
+          }
+        },
+        child: Center(
+          child: Form(
+            key: formKey,
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 400),
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Welcome Back',
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
+                  const SizedBox(height: 32),
+                  TextFormField(
+                    focusNode: usernameFocus,
+                    enabled: authState is! AuthLoadingState, // Not loading
+                    decoration: const InputDecoration(
+                      labelText: 'Username',
+                      prefixIcon: Icon(Icons.person),
                     ),
                     validator: (value) => value?.isEmpty ?? true
-                        ? 'Please enter a password'
+                        ? 'Please enter a username'
                         : null,
-                    onFieldSubmitted: (_) {
-                      if (formKey.currentState!.validate()) {
-                        context.read<AuthState>().login();
-                      }
-                    },
-                  );
-                },
-              ),
-              const SizedBox(height: 32),
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: authService.status == AuthStatus.loading
-                    ? const Center(child: CircularProgressIndicator())
-                    : FilledButton(
-                        onPressed: () {
+                    onFieldSubmitted: (_) => passwordFocus.requestFocus(),
+                  ),
+                  const SizedBox(height: 16),
+                  ValueListenableBuilder(
+                    valueListenable: passwordNotifier,
+                    builder: (_, passwordObscure, __) {
+                      return TextFormField(
+                        focusNode: passwordFocus,
+                        obscureText: passwordObscure,
+                        enabled: authState is! AuthLoadingState, // Not loading
+                        decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                              onPressed: () =>
+                                  passwordNotifier.value = !passwordObscure,
+                              style: IconButton.styleFrom(
+                                minimumSize: const Size.square(48),
+                              ),
+                              icon: Icon(
+                                passwordObscure
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined,
+                                size: 20,
+                                color: Colors.black,
+                              )),
+                          labelText: 'Password',
+                          prefixIcon: const Icon(Icons.lock),
+                        ),
+                        validator: (value) => value?.isEmpty ?? true
+                            ? 'Please enter a password'
+                            : null,
+                        onFieldSubmitted: (_) {
                           if (formKey.currentState!.validate()) {
-                            context.read<AuthState>().login();
+                            // context.read<AuthState>().login();
                           }
                         },
-                        child: const Text('Login'),
-                      ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 32),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: authState is AuthLoadingState
+                        ? const Center(child: CircularProgressIndicator())
+                        : FilledButton(
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                //context.read<AuthState>().login();
+                                context.read<AuthBloc>().add(
+                                    AuthLoginEvent(email: '', password: ''));
+                              }
+                            },
+                            child: const Text('Login'),
+                          ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

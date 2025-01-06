@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:parking_user/blocs/auth/auth_bloc.dart';
 import 'package:parking_user/utils/utils.dart';
-// import 'package:parking_user/providers/auth_state.dart';
-import 'package:provider/provider.dart';
 import 'package:shared/shared.dart';
 
 class LoginView extends StatelessWidget {

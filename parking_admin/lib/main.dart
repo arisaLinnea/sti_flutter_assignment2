@@ -1,21 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:parking_admin/providers/auth_provider.dart';
-import 'package:parking_admin/providers/parking_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:parking_admin/blocs/auth/auth_bloc.dart';
 import 'package:parking_admin/providers/theme_provider.dart';
 import 'package:parking_admin/routes/router.dart';
 import 'package:parking_admin/style/theme.dart';
 import 'package:parking_admin/views/login_view.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_client/shared_client.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => AuthState()),
-      ChangeNotifierProvider(create: (_) => ThemeNotifier()),
-      ChangeNotifierProvider(create: (_) => ParkingProvider())
-    ],
-    child: const FindMeASpotAdmin(),
-  ));
+  // runApp(MultiProvider(
+  //   providers: [
+  //     ChangeNotifierProvider(create: (_) => AuthState()),
+  //     ChangeNotifierProvider(create: (_) => ThemeNotifier()),
+  //     ChangeNotifierProvider(create: (_) => ParkingProvider())
+  //   ],
+  //   child: const FindMeASpotAdmin(),
+  // ));
+  runApp(MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => AuthBloc()),
+        BlocProvider(
+            create: (context) =>
+                ParkingLotBloc(parkingLotRepository: ParkingLotRepository())),
+        BlocProvider(
+            create: (context) =>
+                ParkingBloc(parkingRepository: ParkingRepository())),
+      ],
+      child: ChangeNotifierProvider<ThemeNotifier>(
+        create: (_) => ThemeNotifier(),
+        child: const FindMeASpotAdmin(),
+      )));
 }
 
 class FindMeASpotAdmin extends StatelessWidget {
@@ -34,7 +49,7 @@ class AuthViewSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authStatus = context.watch<AuthState>().status;
+    // final authStatus = context.watch<AuthState>().status;
 
     return Scaffold(
       body: AnimatedSwitcher(
@@ -53,9 +68,16 @@ class AuthViewSwitcher extends StatelessWidget {
             ),
           );
         },
-        child: authStatus == AuthStatus.authenticated
-            ? const NavRailView()
-            : const LoginView(),
+        child: BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
+          if (state is AuthAuthenticatedState) {
+            return const NavRailView();
+          } else {
+            return const LoginView();
+          }
+        }),
+        // authStatus == AuthStatus.authenticated
+        //     ? const NavRailView()
+        //     : const LoginView(),
       ),
     );
   }

@@ -49,6 +49,16 @@ class ParkingLot {
 
   String get id => _id ?? '-1';
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ParkingLot) return false;
+    return other.id == _id; // Compare based on the 'id' field
+  }
+
+  @override
+  int get hashCode => _id.hashCode;
+
   factory ParkingLot.fromJson(Map<String, dynamic> json) {
     return ParkingLot(
         id: json['id'],

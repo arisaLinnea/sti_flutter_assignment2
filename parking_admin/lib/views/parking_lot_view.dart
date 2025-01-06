@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:parking_admin/providers/parking_provider.dart';
 import 'package:parking_admin/widgets/parking_lot_widget.dart';
-import 'package:provider/provider.dart';
+import 'package:shared_client/shared_client.dart';
 
 class ParkingLotView extends StatefulWidget {
   const ParkingLotView({super.key});
@@ -12,6 +12,11 @@ class ParkingLotView extends StatefulWidget {
 }
 
 class _ParkingLotViewState extends State<ParkingLotView> {
+  void initState() {
+    super.initState();
+    context.read<ParkingLotBloc>().add(LoadParkingLotsEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,22 +25,45 @@ class _ParkingLotViewState extends State<ParkingLotView> {
         foregroundColor: Theme.of(context).colorScheme.onPrimary,
         title: const Text("Available parking lots"),
       ),
-      body: Consumer<ParkingProvider>(builder: (context, provider, child) {
-        if (provider.isLotsLoading) {
+      body: BlocListener<ParkingLotBloc, ParkingLotState>(
+          listener: (context, state) {
+        print('vehicleState view listener: $state');
+        if (state is ParkingLotSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+            ),
+          );
+        }
+        if (state is ParkingLotFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.error),
+            ),
+          );
+        }
+      }, child: BlocBuilder<ParkingLotBloc, ParkingLotState>(
+              builder: (context, state) {
+        if (state is ParkingLotLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (provider.parkingsLots.isEmpty) {
+        if (state is ParkingLotLoaded && state.parkingLots.isEmpty) {
           return const Text('No parking lots available.');
         }
-        return ListView.builder(
-          itemCount: provider.parkingsLots.length,
-          itemBuilder: (context, index) {
-            return ParkingLotWidget(
-                item: provider.parkingsLots[index], number: index + 1);
-          },
-        );
-      }),
+        if (state is ParkingLotLoaded) {
+          return ListView.builder(
+            itemCount: state.parkingLots.length,
+            itemBuilder: (context, index) {
+              return ParkingLotWidget(
+                  item: state.parkingLots[index], number: index + 1);
+            },
+          );
+        }
+
+        // Default case to handle unexpected state
+        return const Center(child: Text('Unknown state'));
+      })),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         tooltip: 'Add new parking lot',

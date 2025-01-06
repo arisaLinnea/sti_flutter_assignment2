@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:parking_admin/providers/parking_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared/shared.dart';
+import 'package:shared_client/shared_client.dart';
 
 class ParkingStatView extends StatefulWidget {
   const ParkingStatView({super.key});
@@ -11,6 +13,12 @@ class ParkingStatView extends StatefulWidget {
 }
 
 class _ParkingStatViewState extends State<ParkingStatView> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ParkingBloc>().add(LoadParkingsEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,29 +37,67 @@ class _ParkingStatViewState extends State<ParkingStatView> {
               ),
             ),
           ),
-          Selector<ParkingProvider, List<ParkingLot>>(
-            selector: (context, provider) => provider.getPopularParkingLots(),
-            builder: (context, popularLots, child) {
-              if (popularLots.isEmpty) {
+          BlocBuilder<ParkingBloc, ParkingState>(
+            builder: (context, parkState) {
+              if (parkState is ParkingLoading) {
                 return const SliverToBoxAdapter(
-                  child: Center(child: Text('No popular parkings')),
+                  child: Center(child: CircularProgressIndicator()),
                 );
               }
-              return SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 60.0, vertical: 2.0),
-                      child: Text(popularLots[index].address.toString(),
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
-                    );
-                  },
-                  childCount: popularLots.length,
-                ),
+
+              if (parkState is ParkingLoaded) {
+                List<ParkingLot> popularLots =
+                    context.read<ParkingBloc>().getPopularParkingLots();
+
+                if (popularLots.isEmpty) {
+                  return const SliverToBoxAdapter(
+                    child: Center(child: Text('No popular parkings')),
+                  );
+                }
+
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 60.0, vertical: 2.0),
+                        child: Text(popularLots[index].address.toString(),
+                            style:
+                                const TextStyle(fontWeight: FontWeight.bold)),
+                      );
+                    },
+                    childCount: popularLots.length,
+                  ),
+                );
+              }
+              return const SliverToBoxAdapter(
+                child: Center(child: Text('Error loading popular parkings.')),
               );
             },
           ),
+          // Selector<ParkingProvider, List<ParkingLot>>(
+          //   selector: (context, provider) => provider.getPopularParkingLots(),
+          //   builder: (context, popularLots, child) {
+          //     if (popularLots.isEmpty) {
+          //       return const SliverToBoxAdapter(
+          //         child: Center(child: Text('No popular parkings')),
+          //       );
+          //     }
+          //     return SliverList(
+          //       delegate: SliverChildBuilderDelegate(
+          //         (context, index) {
+          //           return Padding(
+          //             padding: const EdgeInsets.symmetric(
+          //                 horizontal: 60.0, vertical: 2.0),
+          //             child: Text(popularLots[index].address.toString(),
+          //                 style: const TextStyle(fontWeight: FontWeight.bold)),
+          //           );
+          //         },
+          //         childCount: popularLots.length,
+          //       ),
+          //     );
+          //   },
+          // ),
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.all(16.0),
@@ -61,21 +107,49 @@ class _ParkingStatViewState extends State<ParkingStatView> {
               ),
             ),
           ),
-          Selector<ParkingProvider, double>(
-            selector: (context, provider) => provider.sumParking,
-            builder: (context, data, child) {
-              return SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 60.0, vertical: 2.0),
-                  child: Text(
-                    'Sum $data',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+          BlocBuilder<ParkingBloc, ParkingState>(
+            builder: (context, parkState) {
+              if (parkState is ParkingLoading) {
+                return const SliverToBoxAdapter(
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              if (parkState is ParkingLoaded) {
+                double sumParking =
+                    context.read<ParkingBloc>().getSumParkings();
+
+                return SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 60.0, vertical: 2.0),
+                    child: Text(
+                      'Sum $sumParking',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
+                );
+              }
+              return const SliverToBoxAdapter(
+                child: Center(child: Text('Error loading popular parkings.')),
               );
             },
           ),
+          // Selector<ParkingProvider, double>(
+          //   selector: (context, provider) => provider.sumParking,
+          //   builder: (context, data, child) {
+          //     return SliverToBoxAdapter(
+          //       child: Padding(
+          //         padding: const EdgeInsets.symmetric(
+          //             horizontal: 60.0, vertical: 2.0),
+          //         child: Text(
+          //           'Sum $data',
+          //           style: const TextStyle(fontWeight: FontWeight.bold),
+          //         ),
+          //       ),
+          //     );
+          //   },
+          // ),
         ]));
   }
 }
