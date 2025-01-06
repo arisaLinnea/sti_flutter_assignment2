@@ -32,7 +32,6 @@ class ParkingLotBloc extends Bloc<ParkingLotEvent, ParkingLotState> {
   }
 
   Future<void> _handleLoadParkingLots(Emitter<ParkingLotState> emit) async {
-    print('LOAD PARKING LOTS');
     emit(ParkingLotLoading());
     _parkingsLots = await parkingLotRepository.getList();
     emit(ParkingLotLoaded(parkingLots: _parkingsLots));
@@ -67,7 +66,6 @@ class ParkingLotBloc extends Bloc<ParkingLotEvent, ParkingLotState> {
         .where((lot) =>
             (lot.endTime == null || lot.endTime!.isAfter(DateTime.now())))
         .toList();
-    print('activeParkings: $activeParkings');
     return _parkingsLots.where((lot) {
       return !activeParkings.any((parking) => parking.parkinglot?.id == lot.id);
     }).toList();

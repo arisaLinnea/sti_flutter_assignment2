@@ -34,8 +34,6 @@ class _NewParkingViewState extends State<NewParkingView> {
     super.initState();
 
     context.read<VehicleBloc>().add(LoadVehiclesEvent());
-
-    // myCars = Provider.of<VehicleListProvider>(context, listen: false).vehicles;
   }
 
   @override
@@ -51,7 +49,6 @@ class _NewParkingViewState extends State<NewParkingView> {
         ),
         body: BlocListener<ParkingBloc, ParkingState>(
           listener: (context, state) {
-            print('new parking add listener: $state');
             if (state is ParkingFailure) {
               Utils.toastMessage(state.error);
             }
@@ -62,7 +59,6 @@ class _NewParkingViewState extends State<NewParkingView> {
           },
           child: BlocBuilder<VehicleBloc, VehicleState>(
             builder: (context, state) {
-              print('vehicleState add vehicle builder: $state');
               if (state is VehicleLoading) {
                 return const Center(child: CircularProgressIndicator());
               }
@@ -222,18 +218,8 @@ class _NewParkingViewState extends State<NewParkingView> {
                         context
                             .read<ParkingBloc>()
                             .add(AddParkingEvent(parking: newParking));
-                        // String? id = await ParkingRepository()
-                        //     .addToList(item: newParking);
-                        // if (id != null) {
-                        //   Utils.toastMessage('Parking started');
-                        // } else {
-                        //   Utils.toastMessage('Failed to start parking');
-                        // }
+
                         formKey.currentState?.reset();
-                        // if (context.mounted) {
-                        //   context.read<ParkingProvider>().fetchParkings();
-                        //   context.pop();
-                        // }
                       }
                     },
                     child: const Text('Start'),

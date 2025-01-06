@@ -23,7 +23,6 @@ class ParkingAdminLayout extends StatelessWidget {
             selectedIndex: navigationShell.currentIndex,
             onDestinationSelected: (int index) {
               navigationShell.goBranch(index);
-              // updateView();
             },
             labelType: labelType,
             destinations: destinations,

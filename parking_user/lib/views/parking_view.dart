@@ -17,11 +17,7 @@ class _ParkingViewState extends State<ParkingView> {
   @override
   void initState() {
     super.initState();
-    // Owner? owner = Provider.of<AuthState>(context, listen: false).userInfo;
     owner = context.read<AuthBloc>().state.user;
-    // context.read<ParkingProvider>().setOwner(owner);
-    // context.read<VehicleListProvider>().setOwner(owner);
-    // Trigger events to fetch parking data and parking lots
     context.read<ParkingBloc>().add(LoadParkingsEvent());
     context.read<ParkingLotBloc>().add(LoadParkingLotsEvent());
   }
@@ -92,7 +88,6 @@ class _ParkingViewState extends State<ParkingView> {
               },
             ),
           ),
-
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.all(16.0),
@@ -138,7 +133,6 @@ class _ParkingViewState extends State<ParkingView> {
               );
             },
           ),
-
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.all(16.0),
@@ -184,27 +178,6 @@ class _ParkingViewState extends State<ParkingView> {
               );
             },
           ),
-          // Selector<ParkingProvider, List<Parking>>(
-          //   selector: (context, provider) => provider.getMyOldParkings(),
-          //   builder: (context, closedParkings, child) {
-          //     if (closedParkings.isEmpty) {
-          //       return const SliverToBoxAdapter(
-          //         child: Center(child: Text('No ended parkings.')),
-          //       );
-          //     }
-          //     return SliverList(
-          //       delegate: SliverChildBuilderDelegate(
-          //         (context, index) {
-          //           return ParkingWidget(
-          //               item: closedParkings[index],
-          //               number: index + 1,
-          //               isActive: false);
-          //         },
-          //         childCount: closedParkings.length,
-          //       ),
-          //     );
-          //   },
-          // ),
         ]));
   }
 }

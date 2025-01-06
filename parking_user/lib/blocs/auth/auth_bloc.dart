@@ -32,42 +32,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     if (loginUser != null) {
       emit(AuthAuthenticatedState(newUser: loginUser));
-      // Utils.toastMessage('Login Successful');
     } else {
       emit(AuthFailedState(message: 'Login Failed'));
       emit(AuthUnauthorizedState());
-      // Utils.toastMessage('Login Failed');
     }
   }
 
   Future<void> _handleRegisterToState(
       AuthRegisterEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoadingState());
-
-    // yield AuthRegistrationState(status: RegStatus.loading);
-    // try {
-    //   Owner newOwner = Owner(name: event.name, ssn: event.ssn);
-    //   String? uuid = await OwnerRepository().addToList(item: newOwner);
-    //   if (uuid != null) {
-    //     UserLogin newLoginUser = UserLogin(
-    //         ownerId: uuid, userName: event.username, pwd: event.password);
-    //     String? response =
-    //         await UserLoginRepository().addToList(item: newLoginUser);
-    //     if (response != null) {
-    //       Utils.toastMessage('Account successfully created');
-    //       yield AuthRegistrationState(status: RegStatus.ok);
-    //     } else {
-    //       yield AuthRegistrationState(status: RegStatus.ok);
-    //       Utils.toastMessage('Failed to add account');
-    //     }
-    //   } else {
-    //     yield AuthRegistrationState(status: RegStatus.ok);
-    //     Utils.toastMessage('Failed to add account');
-    //   }
-    // } catch (e) {
-    //   yield AuthRegistrationState(status: RegStatus.ok);
-    //   Utils.toastMessage('Failed to add account');
-    // }
   }
 
   Future<void> _handleLogoutToState(Emitter<AuthState> emit) async {

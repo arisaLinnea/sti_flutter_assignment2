@@ -32,28 +32,6 @@ class ParkingLotWidget extends StatelessWidget {
                       context
                           .read<ParkingLotBloc>()
                           .add(RemoveParkingLotEvent(lotId: item.id));
-                      // bool success =
-                      //     await ParkingLotRepository().remove(id: item.id);
-                      // if (success) {
-                      //   if (context.mounted) {
-                      //     ScaffoldMessenger.of(context).showSnackBar(
-                      //       const SnackBar(
-                      //         content: Text('Parking lot removed'),
-                      //       ),
-                      //     );
-                      //   }
-                      // } else {
-                      //   if (context.mounted) {
-                      //     ScaffoldMessenger.of(context).showSnackBar(
-                      //       const SnackBar(
-                      //         content: Text('Failed to remove parking lot'),
-                      //       ),
-                      //     );
-                      //   }
-                      // }
-                      // if (context.mounted) {
-                      //   context.read<ParkingProvider>().updateParkingsLots();
-                      // }
                     },
                   ),
                 ],

@@ -9,14 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_client/shared_client.dart';
 
 void main() {
-  // runApp(MultiProvider(
-  //   providers: [
-  //     ChangeNotifierProvider(create: (_) => AuthState()),
-  //     ChangeNotifierProvider(create: (_) => ThemeNotifier()),
-  //     ChangeNotifierProvider(create: (_) => ParkingProvider())
-  //   ],
-  //   child: const FindMeASpotAdmin(),
-  // ));
   runApp(MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthBloc()),
@@ -49,8 +41,6 @@ class AuthViewSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final authStatus = context.watch<AuthState>().status;
-
     return Scaffold(
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 500),
@@ -75,9 +65,6 @@ class AuthViewSwitcher extends StatelessWidget {
             return const LoginView();
           }
         }),
-        // authStatus == AuthStatus.authenticated
-        //     ? const NavRailView()
-        //     : const LoginView(),
       ),
     );
   }
@@ -91,8 +78,6 @@ class NavRailView extends StatefulWidget {
 }
 
 class _NavRailViewState extends State<NavRailView> {
-  // final int _selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeNotifier>(

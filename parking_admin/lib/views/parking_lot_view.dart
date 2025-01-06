@@ -27,7 +27,6 @@ class _ParkingLotViewState extends State<ParkingLotView> {
       ),
       body: BlocListener<ParkingLotBloc, ParkingLotState>(
           listener: (context, state) {
-        print('vehicleState view listener: $state');
         if (state is ParkingLotSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

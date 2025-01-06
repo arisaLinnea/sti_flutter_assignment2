@@ -11,7 +11,6 @@ class LoginView extends StatelessWidget {
     final ValueNotifier<bool> passwordNotifier = ValueNotifier(true);
     final usernameFocus = FocusNode();
     final passwordFocus = FocusNode();
-    // final authService = context.watch<AuthState>();
     final authState = context.watch<AuthBloc>().state;
 
     // Request focus only when not authenticating
@@ -110,7 +109,6 @@ class LoginView extends StatelessWidget {
                         : FilledButton(
                             onPressed: () {
                               if (formKey.currentState!.validate()) {
-                                //context.read<AuthState>().login();
                                 context.read<AuthBloc>().add(
                                     AuthLoginEvent(email: '', password: ''));
                               }

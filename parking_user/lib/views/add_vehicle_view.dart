@@ -4,7 +4,6 @@ import 'package:parking_user/blocs/auth/auth_bloc.dart';
 import 'package:parking_user/blocs/vehicle/vehicle_bloc.dart';
 import 'package:parking_user/utils/utils.dart';
 import 'package:shared/shared.dart';
-import 'package:shared_client/shared_client.dart';
 
 class AddVehicleView extends StatelessWidget {
   const AddVehicleView({super.key});
@@ -17,7 +16,6 @@ class AddVehicleView extends StatelessWidget {
     CarBrand type = CarBrand.None;
     return BlocListener<VehicleBloc, VehicleState>(
         listener: (context, state) {
-          print('vehicleState add vehicle listener: $state');
           if (state is VehicleFailure) {
             Utils.toastMessage(state.error);
           }
@@ -93,23 +91,10 @@ class AddVehicleView extends StatelessWidget {
                                     registrationNo: regNo!,
                                     type: type,
                                     owner: loggedInUser);
-
-                                // String? id = await VehicleRepository()
-                                //     .addToList(item: newVehicle);
-                                // if (id != null) {
-                                //   Utils.toastMessage('Vehicle added');
-                                // } else {
-                                //   Utils.toastMessage('Failed to add vehicle');
-                                // }
                                 context
                                     .read<VehicleBloc>()
                                     .add(AddVehicleEvent(vehicle: newVehicle));
                                 formKey.currentState?.reset();
-                                // if (context.mounted) {
-                                //   context
-                                //       .read<VehicleListProvider>()
-                                //       .updateVehicleList();
-                                // }
                               }
                             },
                             child: const Text('Add'),

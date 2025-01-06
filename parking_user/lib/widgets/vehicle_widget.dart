@@ -13,22 +13,7 @@ class VehicleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-        // BlocProvider(
-        //   create: (context) => VehicleBloc(vehicleRepository: VehicleRepository()),
-        //   child:
-        // BlocListener<VehicleBloc, VehicleState>(
-        //     listener: (context, state) {
-        //       print('vehicleState widget listener: $state');
-        //       if (state is VehicleSuccess) {
-        //         Utils.toastMessage(state.message);
-        //       }
-        //       if (state is VehicleFailure) {
-        //         Utils.toastMessage(state.error);
-        //       }
-        //     },
-        //     child:
-        Card(
+    return Card(
       color: Theme.of(context).colorScheme.primaryContainer,
       child: ListTile(
         title: Row(
@@ -55,20 +40,6 @@ class VehicleWidget extends StatelessWidget {
                         );
                 },
               ),
-              // child: TextButton(
-              //   child: const Text('Remove'),
-              //   onPressed: () async {
-              //     bool success = await VehicleRepository().remove(id: item.id);
-              //     if (success) {
-              //       Utils.toastMessage('Vehicle removed');
-              //     } else {
-              //       Utils.toastMessage('Failed to remove vehicle');
-              //     }
-              //     if (context.mounted) {
-              //       context.read<VehicleListProvider>().updateVehicleList();
-              //     }
-              //   },
-              // ),
             ),
           ],
         ),
@@ -77,30 +48,8 @@ class VehicleWidget extends StatelessWidget {
             children: <Widget>[
               Text('Registration number: ${item.registrationNo}'),
               Text('Type: ${item.type.name}'),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.end,
-              //   children: <Widget>[
-              //     TextButton(
-              //       child: const Text('Remove'),
-              //       onPressed: () async {
-              //         bool success =
-              //             await VehicleRepository().remove(id: item.id);
-              //         if (success) {
-              //           Utils.toastMessage('Vehicle removed');
-              //         } else {
-              //           Utils.toastMessage('Failed to remove vehicle');
-              //         }
-              //         if (context.mounted) {
-              //           context.read<VehicleListProvider>().updateVehicleList();
-              //         }
-              //       },
-              //     ),
-              //   ],
-              // )
             ]),
       ),
-      // )
     );
-    // );
   }
 }

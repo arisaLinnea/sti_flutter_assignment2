@@ -127,35 +127,10 @@ class AddParkingLotView extends StatelessWidget {
                                 ParkingLot newLot = ParkingLot(
                                     address: address, hourlyPrice: hourlyPrice);
 
-                                // String? id = await ParkingLotRepository()
-                                //     .addToList(item: newLot);
-                                // if (id != null) {
-                                //   if (context.mounted) {
-                                //     ScaffoldMessenger.of(context).showSnackBar(
-                                //       const SnackBar(
-                                //         content: Text("Parking Lot added"),
-                                //       ),
-                                //     );
-                                //   }
-                                // } else {
-                                //   if (context.mounted) {
-                                //     ScaffoldMessenger.of(context).showSnackBar(
-                                //       const SnackBar(
-                                //         content:
-                                //             Text('Failed to add parking lot'),
-                                //       ),
-                                //     );
-                                //   }
-                                // }
                                 context
                                     .read<ParkingLotBloc>()
                                     .add(AddParkingLotEvent(lot: newLot));
                                 formKey.currentState?.reset();
-                                // if (context.mounted) {
-                                //   context
-                                //       .read<ParkingProvider>()
-                                //       .updateParkingsLots();
-                                // }
                               }
                             },
                             child: const Text('Add'),

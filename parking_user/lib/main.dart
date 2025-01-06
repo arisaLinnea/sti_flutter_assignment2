@@ -9,20 +9,7 @@ import 'package:parking_user/views/login_view.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_client/shared_client.dart';
 
-// void main() {
-//   runApp(const FindMeASpot());
-// }
-
 void main() {
-  // runApp(MultiProvider(
-  //   providers: [
-  //     ChangeNotifierProvider(create: (_) => AuthState()),
-  //     ChangeNotifierProvider(create: (_) => ThemeNotifier()),
-  //     ChangeNotifierProvider(create: (_) => VehicleListProvider()),
-  //     ChangeNotifierProvider(create: (_) => ParkingProvider())
-  //   ],
-  //   child: const FindMeASpot(),
-  // ));
   runApp(MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -42,17 +29,7 @@ void main() {
       child: ChangeNotifierProvider<ThemeNotifier>(
         create: (_) => ThemeNotifier(),
         child: const FindMeASpot(),
-      )
-      // MultiProvider(
-      //   providers: [
-      //     // ChangeNotifierProvider(create: (_) => AuthState()),
-      //     ChangeNotifierProvider(create: (_) => ThemeNotifier()),
-      //     // ChangeNotifierProvider(create: (_) => VehicleListProvider()),
-      //     // ChangeNotifierProvider(create: (_) => ParkingProvider())
-      //   ],
-      //   child: const FindMeASpot(),
-      // ),
-      ));
+      )));
 }
 
 class FindMeASpot extends StatelessWidget {
@@ -71,9 +48,6 @@ class AuthViewSwitcher extends StatelessWidget {
   const AuthViewSwitcher({super.key});
   @override
   Widget build(BuildContext context) {
-    // context.read<AuthBloc>().add(AuthCheckEvent());
-    //final authStatus = context.watch<AuthState>().status;
-
     return Scaffold(
         body: AnimatedSwitcher(
       duration: const Duration(milliseconds: 500),
@@ -99,9 +73,6 @@ class AuthViewSwitcher extends StatelessWidget {
             return const LoginView();
           }
         },
-        // authStatus == AuthStatus.authenticated
-        //     ? const UserView()
-        //     : const LoginView(),
       ),
     ));
   }
@@ -115,8 +86,6 @@ class UserView extends StatefulWidget {
 }
 
 class _UserViewState extends State<UserView> {
-  // final int _selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return Consumer<ThemeNotifier>(

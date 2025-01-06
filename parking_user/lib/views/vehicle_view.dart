@@ -17,17 +17,7 @@ class _VehicleViewState extends State<VehicleView> {
   @override
   void initState() {
     super.initState();
-
-    final authState = context.read<AuthBloc>().state;
-    //if (authState is AuthAuthenticatedState) {
-    final owner = authState.user;
-    print('owner: $owner');
-    // If the user is authenticated, load vehicles
     context.read<VehicleBloc>().add(LoadVehiclesEvent());
-    // }
-    // Owner? owner = Provider.of<AuthState>(context, listen: false).userInfo;
-    // context.read<VehicleListProvider>().setOwner(owner);
-    // context.read<VehicleBloc>().add(LoadVehiclesEvent());
   }
 
   @override
@@ -35,7 +25,6 @@ class _VehicleViewState extends State<VehicleView> {
     return Scaffold(
       appBar: AppBar(title: const Text('My vehicles')),
       body: BlocListener<VehicleBloc, VehicleState>(listener: (context, state) {
-        print('vehicleState view listener: $state');
         if (state is VehicleSuccess) {
           Utils.toastMessage(state.message);
         }
@@ -44,7 +33,6 @@ class _VehicleViewState extends State<VehicleView> {
         }
       }, child: BlocBuilder<VehicleBloc, VehicleState>(
         builder: (context, state) {
-          print('authState vehicle builder: $state');
           // Show a loading indicator when vehicles are loading
           if (state is VehicleLoading) {
             return const Center(child: CircularProgressIndicator());

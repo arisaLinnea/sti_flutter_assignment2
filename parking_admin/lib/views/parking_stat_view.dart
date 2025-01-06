@@ -75,29 +75,6 @@ class _ParkingStatViewState extends State<ParkingStatView> {
               );
             },
           ),
-          // Selector<ParkingProvider, List<ParkingLot>>(
-          //   selector: (context, provider) => provider.getPopularParkingLots(),
-          //   builder: (context, popularLots, child) {
-          //     if (popularLots.isEmpty) {
-          //       return const SliverToBoxAdapter(
-          //         child: Center(child: Text('No popular parkings')),
-          //       );
-          //     }
-          //     return SliverList(
-          //       delegate: SliverChildBuilderDelegate(
-          //         (context, index) {
-          //           return Padding(
-          //             padding: const EdgeInsets.symmetric(
-          //                 horizontal: 60.0, vertical: 2.0),
-          //             child: Text(popularLots[index].address.toString(),
-          //                 style: const TextStyle(fontWeight: FontWeight.bold)),
-          //           );
-          //         },
-          //         childCount: popularLots.length,
-          //       ),
-          //     );
-          //   },
-          // ),
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.all(16.0),
@@ -135,21 +112,6 @@ class _ParkingStatViewState extends State<ParkingStatView> {
               );
             },
           ),
-          // Selector<ParkingProvider, double>(
-          //   selector: (context, provider) => provider.sumParking,
-          //   builder: (context, data, child) {
-          //     return SliverToBoxAdapter(
-          //       child: Padding(
-          //         padding: const EdgeInsets.symmetric(
-          //             horizontal: 60.0, vertical: 2.0),
-          //         child: Text(
-          //           'Sum $data',
-          //           style: const TextStyle(fontWeight: FontWeight.bold),
-          //         ),
-          //       ),
-          //     );
-          //   },
-          // ),
         ]));
   }
 }

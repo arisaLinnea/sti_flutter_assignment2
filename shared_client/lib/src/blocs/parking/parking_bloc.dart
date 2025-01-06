@@ -31,7 +31,6 @@ class ParkingBloc extends Bloc<ParkingEvent, ParkingState> {
   }
 
   Future<void> _handleLoadParkings(Emitter<ParkingState> emit) async {
-    print('LOAD PARKINGs');
     emit(ParkingLoading());
     _parkings = await parkingRepository.getList();
     emit(ParkingLoaded(parkings: _parkings));
@@ -108,8 +107,6 @@ class ParkingBloc extends Bloc<ParkingEvent, ParkingState> {
         maxIds.add(lot);
       }
     });
-    // List<ParkingLot> mostCommon =
-    //     _parkingsLots.where((lot) => maxIds.contains(lot.id)).toList();
     List<ParkingLot> mostCommon = _parkings
         .where((parking) => maxIds.contains(parking.parkinglot?.id))
         .map((parking) => parking.parkinglot)
