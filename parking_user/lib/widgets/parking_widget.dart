@@ -45,18 +45,21 @@ class ParkingWidget extends StatelessWidget {
                           onPressed: () async {
                             String id = item.id;
                             item.endTime = DateTime.now();
-                            bool success = await ParkingRepository()
-                                .update(id: id, item: item);
+                            context
+                                .read<ParkingBloc>()
+                                .add(EditParkingEvent(parking: item));
+                            // bool success = await ParkingRepository()
+                            //     .update(id: id, item: item);
 
-                            if (success) {
-                              Utils.toastMessage('Parking ended');
-                            } else {
-                              Utils.toastMessage(
-                                  'Failed to stop parking. Please try again');
-                            }
-                            if (context.mounted) {
-                              context.read<ParkingProvider>().fetchParkings();
-                            }
+                            // if (success) {
+                            //   Utils.toastMessage('Parking ended');
+                            // } else {
+                            //   Utils.toastMessage(
+                            //       'Failed to stop parking. Please try again');
+                            // }
+                            // if (context.mounted) {
+                            //   context.read<ParkingProvider>().fetchParkings();
+                            // }
                           },
                         ),
                       ],

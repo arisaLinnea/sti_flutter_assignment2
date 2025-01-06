@@ -23,6 +23,8 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
           await _handleAddVehicle(event, emit, user);
         } else if (event is LoadVehiclesEvent) {
           await _handleLoadVehicle(emit, user);
+        } else if (event is EditVehicleEvent) {
+          await _handleEditVehicle(event, emit, user);
         }
       } catch (e) {
         emit(VehicleFailure(e.toString()));
@@ -63,5 +65,23 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
     } else {
       emit(VehicleFailure('Failed to add vehicle'));
     }
+  }
+
+  Future<void> _handleEditVehicle(
+      EditVehicleEvent event, Emitter<VehicleState> emit, Owner user) async {
+    emit(VehicleLoading());
+    bool success = await vehicleRepository.update(
+        id: event.vehicle.id, item: event.vehicle);
+
+    if (success) {
+      emit(VehicleSuccess('Vehicle updated successfully'));
+      await _handleLoadVehicle(emit, user);
+    } else {
+      emit(VehicleFailure('Failed to update vehicle'));
+    }
+  }
+
+  Vehicle getVehicleById({required String id}) {
+    return state.vehicleList.firstWhere((element) => element.id == id);
   }
 }

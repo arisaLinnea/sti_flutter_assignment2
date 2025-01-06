@@ -66,6 +66,7 @@ class _VehicleViewState extends State<VehicleView> {
         },
       )),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         tooltip: 'Add new vehicle',
         onPressed: () {
           context.go('/vehicles/addVehicle');

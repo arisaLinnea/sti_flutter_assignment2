@@ -17,4 +17,6 @@ class Routes {
       RouteInfo(name: 'vehicles', path: '/vehicles');
   static const RouteInfo addVehicleRoute =
       RouteInfo(name: 'addVehicles', path: '/addVehicle');
+  static const RouteInfo editVehicleRoute =
+      RouteInfo(name: 'editVehicles', path: '/edit/:vehicleId');
 }

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:parking_user/layout/parking_layout.dart';
 import 'package:parking_user/routes/routes.dart';
 import 'package:parking_user/views/add_vehicle_view.dart';
+import 'package:parking_user/views/edit_vehicle_view.dart';
 import 'package:parking_user/views/home_view.dart';
 import 'package:parking_user/views/new_parking_view.dart';
 import 'package:parking_user/views/parking_view.dart';
@@ -42,6 +43,13 @@ final router = GoRouter(
                     path: Routes.addVehicleRoute.path,
                     builder: (context, state) {
                       return const AddVehicleView();
+                    },
+                  ),
+                  GoRoute(
+                    path: Routes.editVehicleRoute.path,
+                    builder: (context, state) {
+                      final id = state.pathParameters["vehicleId"]!;
+                      return EditVehicleView(vehicleId: id);
                     },
                   ),
                 ],

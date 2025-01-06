@@ -38,6 +38,20 @@ class _ParkingViewState extends State<ParkingView> {
           ),
           BlocListener<ParkingBloc, ParkingState>(
             listener: (context, parkingState) {
+              if (parkingState is ParkingFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(parkingState.error),
+                  ),
+                );
+              }
+              if (parkingState is ParkingSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(parkingState.message),
+                  ),
+                );
+              }
               if (parkingState is ParkingLoaded) {
                 context.read<ParkingLotBloc>().add(LoadParkingLotsEvent());
               }
@@ -64,7 +78,8 @@ class _ParkingViewState extends State<ParkingView> {
                   List<ParkingLot> freeParkingLots = context
                       .read<ParkingLotBloc>()
                       .getFreeParkingLots(
-                          (parkingState as ParkingLoaded).parkings);
+                          allParkings:
+                              (parkingState as ParkingLoaded).parkings);
 
                   if (freeParkingLots.isEmpty) {
                     return const SliverToBoxAdapter(

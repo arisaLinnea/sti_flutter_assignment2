@@ -65,6 +65,7 @@ class _ParkingLotViewState extends State<ParkingLotView> {
       })),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         tooltip: 'Add new parking lot',
         onPressed: () {
           context.go('/parkinglot/addParkinglot');

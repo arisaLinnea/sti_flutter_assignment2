@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared/shared.dart';
 import 'package:shared_client/shared_client.dart';
 
@@ -35,17 +36,16 @@ class ParkingLotWidget extends StatelessWidget {
                     },
                   ),
                 ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  TextButton(
+                    child: const Text('Edit'),
+                    onPressed: () => context.go('/parkinglot/edit/${item.id}'),
+                  ),
+                ],
               )
-              // TODO implement edit later
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.end,
-              //   children: <Widget>[
-              //     TextButton(
-              //       child: const Text('Edit'),
-              //       onPressed: () => context.go('/parkinglot/edit/${item.id}'),
-              //     ),
-              //   ],
-              // )
             ]),
 
         // tileColor: Theme.of(context).colorScheme.primaryContainer,

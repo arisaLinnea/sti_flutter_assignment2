@@ -20,11 +20,9 @@ class ParkingLotBloc extends Bloc<ParkingLotEvent, ParkingLotState> {
           await _handleRemoveParkingLot(event, emit);
         } else if (event is AddParkingLotEvent) {
           await _handleAddParkingLot(event, emit);
+        } else if (event is EditParkingLotEvent) {
+          await _handleEditParkingLot(event, emit);
         }
-        // else if (event is EditParkingLotEvent) {
-        //   await parkingLotRepository.update(item: event.lot);
-        //   await _handleLoadParkingLots(emit);
-        // }
       } catch (e) {
         emit(ParkingLotFailure(e.toString()));
       }
@@ -61,7 +59,20 @@ class ParkingLotBloc extends Bloc<ParkingLotEvent, ParkingLotState> {
     }
   }
 
-  List<ParkingLot> getFreeParkingLots(List<Parking> allParkings) {
+  Future<void> _handleEditParkingLot(
+      EditParkingLotEvent event, Emitter<ParkingLotState> emit) async {
+    emit(ParkingLotLoading());
+    bool success =
+        await parkingLotRepository.update(id: event.lot.id, item: event.lot);
+    if (success) {
+      emit(ParkingLotSuccess('Parking lot updated successfully'));
+      await _handleLoadParkingLots(emit);
+    } else {
+      emit(ParkingLotFailure('Failed to update parking lot'));
+    }
+  }
+
+  List<ParkingLot> getFreeParkingLots({required List<Parking> allParkings}) {
     List<Parking> activeParkings = allParkings
         .where((lot) =>
             (lot.endTime == null || lot.endTime!.isAfter(DateTime.now())))
@@ -69,5 +80,10 @@ class ParkingLotBloc extends Bloc<ParkingLotEvent, ParkingLotState> {
     return _parkingsLots.where((lot) {
       return !activeParkings.any((parking) => parking.parkinglot?.id == lot.id);
     }).toList();
+  }
+
+  ParkingLot getParkingLotById({required String id}) {
+    ParkingLot lot = _parkingsLots.firstWhere((ParkingLot lot) => lot.id == id);
+    return lot;
   }
 }

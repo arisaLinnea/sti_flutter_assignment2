@@ -19,11 +19,9 @@ class ParkingBloc extends Bloc<ParkingEvent, ParkingState> {
           await _handleRemoveParking(event, emit);
         } else if (event is AddParkingEvent) {
           await _handleAddParking(event, emit);
+        } else if (event is EditParkingEvent) {
+          await _handleEditParking(event, emit);
         }
-        // else if (event is EditParkingLotEvent) {
-        //   await parkingLotRepository.update(item: event.lot);
-        //   await _handleLoadParkingLots(emit);
-        // }
       } catch (e) {
         emit(ParkingFailure(e.toString()));
       }
@@ -57,6 +55,19 @@ class ParkingBloc extends Bloc<ParkingEvent, ParkingState> {
       await _handleLoadParkings(emit);
     } else {
       emit(ParkingFailure('Failed to add parking'));
+    }
+  }
+
+  Future<void> _handleEditParking(
+      EditParkingEvent event, Emitter<ParkingState> emit) async {
+    emit(ParkingLoading());
+    bool success = await parkingRepository.update(
+        id: event.parking.id, item: event.parking);
+    if (success) {
+      emit(ParkingSuccess('Parking updated successfully'));
+      await _handleLoadParkings(emit);
+    } else {
+      emit(ParkingFailure('Failed to update parking'));
     }
   }
 

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:parking_admin/layout/parking_admin_layout.dart';
 import 'package:shared/shared.dart';
 import 'package:shared_client/shared_client.dart';
 
@@ -13,7 +16,7 @@ class EditParkingLotView extends StatefulWidget {
 }
 
 class _ParkingLotViewState extends State<EditParkingLotView> {
-  late Future<ParkingLot> parkingLot;
+  late ParkingLot? parkingLot;
   final _formKey = GlobalKey<FormState>();
   String? street = '';
   String? zipcode = '';
@@ -24,137 +27,182 @@ class _ParkingLotViewState extends State<EditParkingLotView> {
   @override
   void initState() {
     super.initState();
-    parkingLot = ParkingLotRepository().getElementById(id: widget.lotId);
+    parkingLot =
+        context.read<ParkingLotBloc>().getParkingLotById(id: widget.lotId);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Edit Parking Lot'),
-        backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-      ),
-      body: FutureBuilder<ParkingLot>(
-        future: parkingLot,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return const Center(
-                child: Text('Error: Parking Lot could not be fetched'));
-          } else if (snapshot.hasData) {
-            ParkingLot parkingLotData = snapshot.data!;
-            // Build UI with the parking lot data
-            return Form(
-              key: _formKey,
-              child: Scrollbar(
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Card(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(16),
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 400),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ...[
-                              TextFormField(
-                                decoration: const InputDecoration(
-                                  filled: true,
-                                  labelText: 'Street',
-                                ),
-                                initialValue: parkingLotData.address?.street,
-                                onChanged: (value) {
-                                  setState(() {
-                                    street = value;
-                                  });
-                                },
-                              ),
-                              TextFormField(
-                                decoration: const InputDecoration(
-                                  filled: true,
-                                  labelText: 'ZipCode',
-                                ),
-                                initialValue: parkingLotData.address?.zipCode,
-                                onChanged: (value) {
-                                  setState(() {
-                                    zipcode = value;
-                                  });
-                                },
-                              ),
-                              TextFormField(
-                                decoration: const InputDecoration(
-                                  filled: true,
-                                  labelText: 'City',
-                                ),
-                                initialValue: parkingLotData.address?.city,
-                                onChanged: (value) {
-                                  setState(() {
-                                    city = value;
-                                  });
-                                },
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+    return BlocListener<ParkingLotBloc, ParkingLotState>(
+        listener: (context, state) {
+          if (state is ParkingLotFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.error),
+              ),
+            );
+          }
+          if (state is ParkingLotSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+              ),
+            );
+            context.pop();
+          }
+        },
+        child: Scaffold(
+            appBar: AppBar(
+              title: const Text('Edit Parking Lot'),
+              backgroundColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            ),
+            body: parkingLot == null
+                ? const Text('Some error occurred')
+                : Form(
+                    key: _formKey,
+                    child: Scrollbar(
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: Card(
+                          child: SingleChildScrollView(
+                            padding: const EdgeInsets.all(16),
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 400),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Price',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge,
+                                  ...[
+                                    TextFormField(
+                                      decoration: const InputDecoration(
+                                        filled: true,
+                                        labelText: 'Street',
                                       ),
+                                      initialValue: parkingLot?.address?.street,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          street = value;
+                                        });
+                                      },
+                                    ),
+                                    TextFormField(
+                                      decoration: const InputDecoration(
+                                        filled: true,
+                                        labelText: 'ZipCode',
+                                      ),
+                                      initialValue:
+                                          parkingLot?.address?.zipCode,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          zipcode = value;
+                                        });
+                                      },
+                                    ),
+                                    TextFormField(
+                                      decoration: const InputDecoration(
+                                        filled: true,
+                                        labelText: 'City',
+                                      ),
+                                      initialValue: parkingLot?.address?.city,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          city = value;
+                                        });
+                                      },
+                                    ),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Price',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge,
+                                            ),
+                                          ],
+                                        ),
+                                        Text(
+                                          intl.NumberFormat.currency(
+                                                  symbol: "\$",
+                                                  decimalDigits: 0)
+                                              .format(price ??
+                                                  parkingLot?.hourlyPrice),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium,
+                                        ),
+                                        Slider(
+                                          min: 0,
+                                          max: maxValue.toDouble(),
+                                          divisions: maxValue,
+                                          value:
+                                              price ?? parkingLot!.hourlyPrice,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              price = value;
+                                            });
+                                          },
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 40.0, vertical: 24.0),
+                                          child: SizedBox(
+                                              width: double.infinity,
+                                              height: 48,
+                                              child: FilledButton(
+                                                onPressed: () async {
+                                                  if (_formKey.currentState!
+                                                      .validate()) {
+                                                    _formKey.currentState!
+                                                        .save();
+
+                                                    ParkingLot editedLot =
+                                                        ParkingLot(
+                                                            id: parkingLot!.id,
+                                                            address: Address(
+                                                                street: street!,
+                                                                zipCode:
+                                                                    zipcode!,
+                                                                city: city!),
+                                                            hourlyPrice:
+                                                                price!);
+                                                    context
+                                                        .read<ParkingLotBloc>()
+                                                        .add(
+                                                            EditParkingLotEvent(
+                                                                lot:
+                                                                    editedLot));
+                                                    // _formKey.currentState?.reset();
+                                                  }
+                                                },
+                                                child: const Text('Update'),
+                                              )),
+                                        ),
+                                      ],
+                                    ),
+                                  ].expand(
+                                    (widget) => [
+                                      widget,
+                                      const SizedBox(
+                                        height: 24,
+                                      )
                                     ],
-                                  ),
-                                  Text(
-                                    intl.NumberFormat.currency(
-                                            symbol: "\$", decimalDigits: 0)
-                                        .format(price ??
-                                            parkingLotData.hourlyPrice),
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
-                                  ),
-                                  Slider(
-                                    min: 0,
-                                    max: maxValue.toDouble(),
-                                    divisions: maxValue,
-                                    value: price ?? parkingLotData.hourlyPrice,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        price = value;
-                                      });
-                                    },
-                                  ),
+                                  )
                                 ],
                               ),
-                            ].expand(
-                              (widget) => [
-                                widget,
-                                const SizedBox(
-                                  height: 24,
-                                )
-                              ],
-                            )
-                          ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-            );
-          } else {
-            return const Center(child: Text('No data available'));
-          }
-        },
-      ),
-    );
+                  )));
   }
 }
