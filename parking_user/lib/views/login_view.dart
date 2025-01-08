@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:parking_user/blocs/auth/auth_bloc.dart';
+import 'package:parking_user/blocs/user/user_reg_bloc.dart';
 import 'package:parking_user/utils/utils.dart';
 import 'package:shared/shared.dart';
 
@@ -123,7 +124,7 @@ class LoginView extends StatelessWidget {
                     width: double.infinity,
                     height: 48,
                     child: FilledButton(
-                      onPressed: () => {}, //showRegistrationDialog(context),
+                      onPressed: () => showRegistrationDialog(context),
                       child: const Text('Create account'),
                     ),
                   ),
@@ -134,131 +135,141 @@ class LoginView extends StatelessWidget {
         ));
   }
 
-//   void showRegistrationDialog(BuildContext context) async {
-//     final regFormKey = GlobalKey<FormState>();
-//     final authState = Provider.of<AuthState>(context, listen: false);
-//     String? userName;
-//     String? pwd;
-//     String? name;
-//     String? ssn;
+  void showRegistrationDialog(BuildContext context) async {
+    final regFormKey = GlobalKey<FormState>();
+    // final authState = Provider.of<AuthState>(context, listen: false);
+    String? userName;
+    String? pwd;
+    String? name;
+    String? ssn;
 
-//     showDialog(
-//         context: context,
-//         builder: (context) {
-//           return Dialog(
-//               child: SingleChildScrollView(
-//             child: Container(
-//                 decoration: BoxDecoration(
-//                   color: Theme.of(context).canvasColor, //Colors.white,
-//                   borderRadius: BorderRadius.circular(12),
-//                   boxShadow: [
-//                     BoxShadow(
-//                       color: Theme.of(context).colorScheme.primary,
-//                       offset: const Offset(4, 4),
-//                       spreadRadius: 2,
-//                       blurStyle: BlurStyle.solid,
-//                     ),
-//                   ],
-//                 ),
-//                 padding: const EdgeInsets.all(12.0),
-//                 child: Form(
-//                     key: regFormKey,
-//                     child: Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         mainAxisSize: MainAxisSize.min,
-//                         children: [
-//                           const Row(
-//                             mainAxisSize: MainAxisSize.max,
-//                             children: [
-//                               Text(
-//                                 "Create a new account",
-//                                 style: TextStyle(
-//                                     fontSize: 22, fontWeight: FontWeight.w600),
-//                               ),
-//                               Spacer(),
-//                               Align(
-//                                 alignment: Alignment.topRight,
-//                                 child: CloseButton(),
-//                               ),
-//                             ],
-//                           ),
-//                           const SizedBox(height: 16),
-//                           TextFormField(
-//                               onSaved: (newValue) => name = newValue,
-//                               decoration: const InputDecoration(
-//                                 labelText: 'Name',
-//                                 prefixIcon: Icon(Icons.account_circle),
-//                               ),
-//                               validator: (value) {
-//                                 if (value == null || value.isEmpty) {
-//                                   return 'Please fill in a name';
-//                                 }
-//                                 return null;
-//                               }),
-//                           const SizedBox(height: 24),
-//                           TextFormField(
-//                             onSaved: (newValue) => ssn = newValue,
-//                             decoration: const InputDecoration(
-//                               labelText: 'SSN',
-//                               prefixIcon: Icon(Icons.key),
-//                             ),
-//                             validator: (value) => value?.isValidSsn() ?? true
-//                                 ? null
-//                                 : 'Please fill in a valid ssn, eg YYMMDDNNNN',
-//                           ),
-//                           const SizedBox(height: 24),
-//                           TextFormField(
-//                               onSaved: (newValue) => userName = newValue,
-//                               decoration: const InputDecoration(
-//                                 labelText: 'Email / Username',
-//                                 prefixIcon: Icon(Icons.person),
-//                               ),
-//                               validator: (value) =>
-//                                   value?.isValidEmail() ?? true
-//                                       ? null
-//                                       : 'Please fill in a valid email address'),
-//                           const SizedBox(height: 24),
-//                           TextFormField(
-//                               onSaved: (newValue) => pwd = newValue,
-//                               decoration: const InputDecoration(
-//                                 labelText: 'Password',
-//                                 prefixIcon: Icon(Icons.lock),
-//                               ),
-//                               validator: (value) =>
-//                                   value?.isValidPassword() ?? true
-//                                       ? null
-//                                       : 'Please fill in a password'),
-//                           const SizedBox(height: 24),
-//                           SizedBox(
-//                             width: double.infinity,
-//                             height: 48,
-//                             child: authState.regStatus == RegStatus.loading
-//                                 ? const Center(
-//                                     child: CircularProgressIndicator())
-//                                 : FilledButton(
-//                                     onPressed: () async {
-//                                       if (regFormKey.currentState!.validate()) {
-//                                         // context.read<AuthState>().setUser(youruserinfo);
-//                                         regFormKey.currentState!.save();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+              child: SingleChildScrollView(
+            child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor, //Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Theme.of(context).colorScheme.primary,
+                      offset: const Offset(4, 4),
+                      spreadRadius: 2,
+                      blurStyle: BlurStyle.solid,
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.all(12.0),
+                child: Form(
+                  key: regFormKey,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              "Create a new account",
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.w600),
+                            ),
+                            Spacer(),
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: CloseButton(),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                            onSaved: (newValue) => name = newValue,
+                            decoration: const InputDecoration(
+                              labelText: 'Name',
+                              prefixIcon: Icon(Icons.account_circle),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please fill in a name';
+                              }
+                              return null;
+                            }),
+                        const SizedBox(height: 24),
+                        TextFormField(
+                          onSaved: (newValue) => ssn = newValue,
+                          decoration: const InputDecoration(
+                            labelText: 'SSN',
+                            prefixIcon: Icon(Icons.key),
+                          ),
+                          validator: (value) => value?.isValidSsn() ?? true
+                              ? null
+                              : 'Please fill in a valid ssn, eg YYMMDDNNNN',
+                        ),
+                        const SizedBox(height: 24),
+                        TextFormField(
+                            onSaved: (newValue) => userName = newValue,
+                            decoration: const InputDecoration(
+                              labelText: 'Email / Username',
+                              prefixIcon: Icon(Icons.person),
+                            ),
+                            validator: (value) => value?.isValidEmail() ?? true
+                                ? null
+                                : 'Please fill in a valid email address'),
+                        const SizedBox(height: 24),
+                        TextFormField(
+                            onSaved: (newValue) => pwd = newValue,
+                            decoration: const InputDecoration(
+                              labelText: 'Password',
+                              prefixIcon: Icon(Icons.lock),
+                            ),
+                            validator: (value) =>
+                                value?.isValidPassword() ?? true
+                                    ? null
+                                    : 'Please fill in a password'),
+                        const SizedBox(height: 24),
+                        BlocConsumer<UserRegBloc, UserRegState>(
+                            listener: (context, state) {
+                          if (state is UserRegFailedState) {
+                            Utils.toastMessage(state.message);
+                          }
+                          if (state is AuthRegistrationState) {
+                            Utils.toastMessage('Registration successful');
+                            Navigator.of(context).pop();
+                          }
+                        }, builder: (context, state) {
+                          if (state is UserRegLoadingState) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          return SizedBox(
+                            width: double.infinity,
+                            height: 48,
+                            child: FilledButton(
+                              onPressed: () async {
+                                if (regFormKey.currentState!.validate()) {
+                                  // context.read<AuthState>().setUser(youruserinfo);
+                                  regFormKey.currentState!.save();
 
-//                                         bool success = await context
-//                                             .read<AuthState>()
-//                                             .register(
-//                                                 userName: userName?.trim(),
-//                                                 pwd: pwd?.trim(),
-//                                                 name: name?.trim(),
-//                                                 ssn: ssn?.trim());
-//                                         if (success) {
-//                                           Navigator.of(context).pop();
-//                                         }
-//                                       }
-//                                     },
-//                                     child: const Text('Add'),
-//                                   ),
-//                           ),
-//                           const SizedBox(height: 24),
-//                         ]))),
-//           ));
-//         });
-//   }
+                                  context.read<UserRegBloc>().add(
+                                        UserRegisterEvent(
+                                          username: userName!.trim(),
+                                          password: pwd!.trim(),
+                                          name: name!.trim(),
+                                          ssn: ssn!.trim(),
+                                        ),
+                                      );
+                                }
+                              },
+                              child: const Text('Add'),
+                            ),
+                          );
+                        }),
+                        const SizedBox(height: 24)
+                      ]),
+                )),
+          ));
+        });
+  }
 }

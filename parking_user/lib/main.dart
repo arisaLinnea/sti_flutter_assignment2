@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:parking_user/blocs/auth/auth_bloc.dart';
+import 'package:parking_user/blocs/user/user_reg_bloc.dart';
 import 'package:parking_user/blocs/vehicle/vehicle_bloc.dart';
 import 'package:parking_user/providers/theme_provider.dart';
 import 'package:parking_user/routes/router.dart';
@@ -15,6 +16,10 @@ void main() {
         BlocProvider(
             create: (context) =>
                 AuthBloc(userLoginRepository: UserLoginRepository())),
+        BlocProvider(
+            create: (context) => UserRegBloc(
+                userLoginRepository: UserLoginRepository(),
+                ownerRepository: OwnerRepository())),
         BlocProvider(
             create: (context) => VehicleBloc(
                 vehicleRepository: VehicleRepository(),

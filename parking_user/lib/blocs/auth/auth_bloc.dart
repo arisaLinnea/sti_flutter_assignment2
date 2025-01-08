@@ -13,8 +13,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       try {
         if (event is AuthLoginEvent) {
           await _handleLoginToState(event, emit);
-        } else if (event is AuthRegisterEvent) {
-          await _handleRegisterToState(event, emit);
         } else if (event is AuthLogoutEvent) {
           await _handleLogoutToState(emit);
         }
@@ -28,7 +26,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       AuthLoginEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoadingState());
     var data = UserLogin(userName: event.email, pwd: event.password);
-    Owner? loginUser = await UserLoginRepository().canUserLogin(user: data);
+    Owner? loginUser = await userLoginRepository.canUserLogin(user: data);
 
     if (loginUser != null) {
       emit(AuthAuthenticatedState(newUser: loginUser));
@@ -36,11 +34,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthFailedState(message: 'Login Failed'));
       emit(AuthUnauthorizedState());
     }
-  }
-
-  Future<void> _handleRegisterToState(
-      AuthRegisterEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoadingState());
   }
 
   Future<void> _handleLogoutToState(Emitter<AuthState> emit) async {

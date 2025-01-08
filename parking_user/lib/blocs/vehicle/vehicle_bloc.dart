@@ -15,7 +15,6 @@ class VehicleBloc extends Bloc<VehicleEvent, VehicleState> {
       : super(VehicleInitial()) {
     on<VehicleEvent>((event, emit) async {
       final user = authBloc.state.user;
-
       try {
         if (event is RemoveVehicleEvent) {
           await _handleRemoveVehicle(event, emit, user);

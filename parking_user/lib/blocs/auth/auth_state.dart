@@ -1,7 +1,5 @@
 part of 'auth_bloc.dart';
 
-enum RegStatus { ok, loading }
-
 enum AuthStatus { unauthorized, loading, authenticated }
 
 abstract class AuthState extends Equatable {
@@ -19,32 +17,26 @@ class AuthLoadingState extends AuthState {}
 class AuthFailedState extends AuthState {
   final String message;
 
-  AuthFailedState({required this.message});
+  AuthFailedState({required this.message}) {
+    status = AuthStatus.unauthorized;
+  }
 
   @override
   List<Object?> get props => [message];
 }
 
 class AuthAuthenticatedState extends AuthState {
-  // final Owner user;
-
   AuthAuthenticatedState({required newUser}) {
     user = newUser;
+    status = AuthStatus.authenticated;
   }
 
   @override
   List<Object?> get props => [user];
 }
 
-class AuthUnauthorizedState extends AuthState {}
-
-class AuthRegistrationState extends AuthState {
-  // final RegStatus status;
-
-  AuthRegistrationState({required newStatus}) {
-    status = newStatus;
+class AuthUnauthorizedState extends AuthState {
+  AuthUnauthorizedState() {
+    status = AuthStatus.unauthorized;
   }
-
-  @override
-  List<Object?> get props => [status];
 }
