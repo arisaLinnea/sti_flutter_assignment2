@@ -24,7 +24,6 @@ abstract class Repository<T> {
 
   Future<String?> addToList({required T item}) async {
     Uri updatedUri = uri.replace(path: '/api/$_path');
-    print('item: $item');
     try {
       final response = await http.post(updatedUri,
           headers: {'Content-Type': 'application/json'},
