@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:parking_admin/layout/parking_admin_layout.dart';
+import 'package:parking_admin/utils/utils.dart';
 import 'package:shared/shared.dart';
 import 'package:shared_client/shared_client.dart';
 
@@ -36,18 +37,11 @@ class _ParkingLotViewState extends State<EditParkingLotView> {
     return BlocListener<ParkingLotBloc, ParkingLotState>(
         listener: (context, state) {
           if (state is ParkingLotFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.error),
-              ),
-            );
+            Utils().showSnackBar(context, state.error);
           }
           if (state is ParkingLotSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-              ),
-            );
+            Utils().showSnackBar(context, state.message);
+
             context.pop();
           }
         },
@@ -74,43 +68,69 @@ class _ParkingLotViewState extends State<EditParkingLotView> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   ...[
-                                    TextFormField(
-                                      decoration: const InputDecoration(
-                                        filled: true,
-                                        labelText: 'Street',
-                                      ),
-                                      initialValue: parkingLot?.address?.street,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          street = value;
-                                        });
-                                      },
-                                    ),
-                                    TextFormField(
-                                      decoration: const InputDecoration(
-                                        filled: true,
-                                        labelText: 'ZipCode',
-                                      ),
-                                      initialValue:
-                                          parkingLot?.address?.zipCode,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          zipcode = value;
-                                        });
-                                      },
-                                    ),
-                                    TextFormField(
-                                      decoration: const InputDecoration(
-                                        filled: true,
-                                        labelText: 'City',
-                                      ),
-                                      initialValue: parkingLot?.address?.city,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          city = value;
-                                        });
-                                      },
-                                    ),
+                                    // TextFormField(
+                                    //   decoration: const InputDecoration(
+                                    //     filled: true,
+                                    //     labelText: 'Street',
+                                    //   ),
+                                    //   initialValue: parkingLot?.address?.street,
+                                    //   onChanged: (value) {
+                                    //     setState(() {
+                                    //       street = value;
+                                    //     });
+                                    //   },
+                                    // ),
+                                    parkingFormEditTextField(
+                                        label: 'Street',
+                                        initialValue:
+                                            parkingLot?.address?.street,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            street = value;
+                                          });
+                                        }),
+                                    // TextFormField(
+                                    //   decoration: const InputDecoration(
+                                    //     filled: true,
+                                    //     labelText: 'ZipCode',
+                                    //   ),
+                                    //   initialValue:
+                                    //       parkingLot?.address?.zipCode,
+                                    //   onChanged: (value) {
+                                    //     setState(() {
+                                    //       zipcode = value;
+                                    //     });
+                                    //   },
+                                    // ),
+                                    parkingFormEditTextField(
+                                        label: 'ZipCode',
+                                        initialValue:
+                                            parkingLot?.address?.zipCode,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            zipcode = value;
+                                          });
+                                        }),
+                                    // TextFormField(
+                                    //   decoration: const InputDecoration(
+                                    //     filled: true,
+                                    //     labelText: 'City',
+                                    //   ),
+                                    //   initialValue: parkingLot?.address?.city,
+                                    //   onChanged: (value) {
+                                    //     setState(() {
+                                    //       city = value;
+                                    //     });
+                                    //   },
+                                    // ),
+                                    parkingFormEditTextField(
+                                        label: 'City',
+                                        initialValue: parkingLot?.address?.city,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            city = value;
+                                          });
+                                        }),
                                     Column(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,

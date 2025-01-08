@@ -40,7 +40,7 @@ void main() {
         return authBloc;
       },
       act: (bloc) => bloc.add(
-        AuthLoginEvent(email: username, password: password),
+        AuthLoginEvent(email: mockUsername, password: mockPassword),
       ),
       expect: () => [
         AuthLoadingState(),
@@ -62,7 +62,7 @@ void main() {
         return authBloc;
       },
       act: (bloc) => bloc.add(
-        AuthLoginEvent(email: username, password: password),
+        AuthLoginEvent(email: mockUsername, password: mockPassword),
       ),
       expect: () => [
         AuthLoadingState(),

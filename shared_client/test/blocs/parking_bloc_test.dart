@@ -93,7 +93,7 @@ void main() {
             .thenAnswer((_) async => [newParking]);
         return parkingBloc;
       },
-      act: (bloc) => bloc.add(RemoveParkingEvent(parkingId: parkingId)),
+      act: (bloc) => bloc.add(RemoveParkingEvent(parkingId: mockParkingId)),
       expect: () => [
         ParkingLoading(),
         ParkingSuccess('Parking removed successfully'),
@@ -101,7 +101,7 @@ void main() {
         ParkingLoaded(parkings: [newParking]),
       ],
       verify: (_) {
-        verify(() => mockParkingRepository.remove(id: parkingId)).called(1);
+        verify(() => mockParkingRepository.remove(id: mockParkingId)).called(1);
         verify(() => mockParkingRepository.getList()).called(1);
       },
     );
@@ -114,13 +114,14 @@ void main() {
               .thenAnswer((_) async => false);
           return parkingBloc;
         },
-        act: (bloc) => bloc.add(RemoveParkingEvent(parkingId: parkingId)),
+        act: (bloc) => bloc.add(RemoveParkingEvent(parkingId: mockParkingId)),
         expect: () => [
               ParkingLoading(),
               ParkingFailure('Failed to remove parking'),
             ],
         verify: (_) {
-          verify(() => mockParkingRepository.remove(id: parkingId)).called(1);
+          verify(() => mockParkingRepository.remove(id: mockParkingId))
+              .called(1);
           verifyNever(() => mockParkingRepository.getList());
         });
 
@@ -131,13 +132,13 @@ void main() {
             .thenThrow(Exception('Remove Parking Failed'));
         return parkingBloc;
       },
-      act: (bloc) => bloc.add(RemoveParkingEvent(parkingId: parkingId)),
+      act: (bloc) => bloc.add(RemoveParkingEvent(parkingId: mockParkingId)),
       expect: () => [
         ParkingLoading(),
         ParkingFailure('Exception: Remove Parking Failed'),
       ],
       verify: (_) {
-        verify(() => mockParkingRepository.remove(id: parkingId)).called(1);
+        verify(() => mockParkingRepository.remove(id: mockParkingId)).called(1);
         verifyNever(() => mockParkingRepository.getList());
       },
     );

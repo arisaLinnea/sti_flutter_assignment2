@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:parking_admin/blocs/auth/auth_bloc.dart';
+import 'package:parking_admin/utils/utils.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -23,19 +24,11 @@ class LoginView extends StatelessWidget {
     return BlocListener<AuthBloc, AuthState>(
         listener: (context, authState) {
           if (authState is AuthAuthenticatedState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Login Successful'),
-              ),
-            );
+            Utils().showSnackBar(context, 'Login Successful');
           }
 
           if (authState is AuthFailedState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Login Failed'),
-              ),
-            );
+            Utils().showSnackBar(context, 'Login Failed');
           }
         },
         child: Center(

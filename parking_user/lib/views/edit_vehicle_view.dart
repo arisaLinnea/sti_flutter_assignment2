@@ -37,78 +37,80 @@ class EditVehicleView extends StatelessWidget {
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
               ),
             ),
-            body: Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 40.0, vertical: 8.0),
-                        child: TextFormField(
-                          onSaved: (newValue) => regNo = newValue,
-                          decoration: const InputDecoration(
-                            labelText: 'Registration number',
-                          ),
-                          initialValue: vehicle.registrationNo,
-                          validator: (value) => value?.isValidRegNo() ?? true
-                              ? null
-                              : 'Enter a valid registration number',
-                          onFieldSubmitted: (_) {
-                            if (formKey.currentState!.validate()) {}
-                          },
-                        )),
-                    Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 40.0, vertical: 8.0),
-                        child: DropdownButtonFormField<CarBrand>(
-                          decoration: const InputDecoration(
-                            labelText: 'Car brand',
-                          ),
-                          value: type,
-                          hint: const Text('Select a vehicle type'),
-                          onSaved: (newValue) => type = newValue!,
-                          onChanged: (CarBrand? value) {},
-                          validator: (value) {
-                            if (value == null || value == CarBrand.None) {
-                              return 'Please select a car brand';
-                            }
-                            return null;
-                          },
-                          items:
-                              // CarBrand
-                              CarBrand.values.map<DropdownMenuItem<CarBrand>>(
-                                  (CarBrand value) {
-                            return DropdownMenuItem<CarBrand>(
-                              value: value,
-                              child: Text(value.name),
-                            );
-                          }).toList(),
-                        )),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40.0, vertical: 24.0),
-                      child: SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: FilledButton(
-                            onPressed: () async {
-                              if (formKey.currentState!.validate()) {
-                                formKey.currentState!.save();
+            body: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40.0, vertical: 8.0),
+                child: Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: TextFormField(
+                              onSaved: (newValue) => regNo = newValue,
+                              decoration: const InputDecoration(
+                                labelText: 'Registration number',
+                              ),
+                              initialValue: vehicle.registrationNo,
+                              validator: (value) =>
+                                  value?.isValidRegNo() ?? true
+                                      ? null
+                                      : 'Enter a valid registration number',
+                              onFieldSubmitted: (_) {
+                                if (formKey.currentState!.validate()) {}
+                              },
+                            )),
+                        Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: DropdownButtonFormField<CarBrand>(
+                              decoration: const InputDecoration(
+                                labelText: 'Car brand',
+                              ),
+                              value: type,
+                              hint: const Text('Select a vehicle type'),
+                              onSaved: (newValue) => type = newValue!,
+                              onChanged: (CarBrand? value) {},
+                              validator: (value) {
+                                if (value == null || value == CarBrand.None) {
+                                  return 'Please select a car brand';
+                                }
+                                return null;
+                              },
+                              items:
+                                  // CarBrand
+                                  CarBrand.values
+                                      .map<DropdownMenuItem<CarBrand>>(
+                                          (CarBrand value) {
+                                return DropdownMenuItem<CarBrand>(
+                                  value: value,
+                                  child: Text(value.name),
+                                );
+                              }).toList(),
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 24.0),
+                          child: SizedBox(
+                              width: double.infinity,
+                              height: 48,
+                              child: FilledButton(
+                                onPressed: () async {
+                                  if (formKey.currentState!.validate()) {
+                                    formKey.currentState!.save();
 
-                                Vehicle editVehicle = Vehicle(
-                                    id: vehicleId,
-                                    registrationNo: regNo!,
-                                    type: type,
-                                    owner: loggedInUser);
-                                context.read<VehicleBloc>().add(
-                                    EditVehicleEvent(vehicle: editVehicle));
-                                formKey.currentState?.reset();
-                              }
-                            },
-                            child: const Text('Edit'),
-                          )),
-                    ),
-                  ],
-                ))));
+                                    Vehicle editVehicle = Vehicle(
+                                        id: vehicleId,
+                                        registrationNo: regNo!,
+                                        type: type,
+                                        owner: loggedInUser);
+                                    context.read<VehicleBloc>().add(
+                                        EditVehicleEvent(vehicle: editVehicle));
+                                    formKey.currentState?.reset();
+                                  }
+                                },
+                                child: const Text('Change'),
+                              )),
+                        ),
+                      ],
+                    )))));
   }
 }

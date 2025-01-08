@@ -19,24 +19,7 @@ class ParkingLayout extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: const Text('Find Me A Spot'),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.person),
-              onPressed: () => context.read<AuthBloc>().add(AuthLogoutEvent()),
-            ),
-            IconButton(
-              icon: const Icon(Icons.brightness_6),
-              onPressed: () {
-                ThemeNotifier themeNotifier =
-                    Provider.of<ThemeNotifier>(context, listen: false);
-                if (themeNotifier.themeMode == ThemeMode.light) {
-                  themeNotifier.setTheme(ThemeMode.dark);
-                } else {
-                  themeNotifier.setTheme(ThemeMode.light);
-                }
-              },
-            )
-          ],
+          actions: actionButtons(context),
         ),
         body: navigationShell,
         bottomNavigationBar: NavigationBar(
@@ -46,4 +29,25 @@ class ParkingLayout extends StatelessWidget {
           destinations: navbar,
         ),
       );
+
+  List<Widget> actionButtons(BuildContext context) {
+    return <Widget>[
+      IconButton(
+        icon: const Icon(Icons.person),
+        onPressed: () => context.read<AuthBloc>().add(AuthLogoutEvent()),
+      ),
+      IconButton(
+        icon: const Icon(Icons.brightness_6),
+        onPressed: () {
+          ThemeNotifier themeNotifier =
+              Provider.of<ThemeNotifier>(context, listen: false);
+          if (themeNotifier.themeMode == ThemeMode.light) {
+            themeNotifier.setTheme(ThemeMode.dark);
+          } else {
+            themeNotifier.setTheme(ThemeMode.light);
+          }
+        },
+      )
+    ];
+  }
 }

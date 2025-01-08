@@ -48,10 +48,10 @@ void main() {
       },
       act: (bloc) => bloc.add(
         UserRegisterEvent(
-          username: username,
-          password: password,
-          name: name,
-          ssn: ssn,
+          username: mockUsername,
+          password: mockPassword,
+          name: mockName,
+          ssn: mockSsn,
         ),
       ),
       expect: () => [
@@ -76,10 +76,10 @@ void main() {
       },
       act: (bloc) => bloc.add(
         UserRegisterEvent(
-          username: username,
-          password: password,
-          name: name,
-          ssn: ssn,
+          username: mockUsername,
+          password: mockPassword,
+          name: mockName,
+          ssn: mockSsn,
         ),
       ),
       expect: () => [
@@ -106,10 +106,10 @@ void main() {
       },
       act: (bloc) => bloc.add(
         UserRegisterEvent(
-          username: username,
-          password: password,
-          name: name,
-          ssn: ssn,
+          username: mockUsername,
+          password: mockPassword,
+          name: mockName,
+          ssn: mockSsn,
         ),
       ),
       expect: () => [

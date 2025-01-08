@@ -31,25 +31,7 @@ class ParkingAdminLayout extends StatelessWidget {
                 alignment: Alignment.bottomCenter,
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 16.0),
-                  child: Column(children: [
-                    IconButton(
-                      icon: const Icon(Icons.person),
-                      onPressed: () =>
-                          context.read<AuthBloc>().add(AuthLogoutEvent()),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.brightness_6),
-                      onPressed: () {
-                        ThemeNotifier themeNotifier =
-                            Provider.of<ThemeNotifier>(context, listen: false);
-                        if (themeNotifier.themeMode == ThemeMode.light) {
-                          themeNotifier.setTheme(ThemeMode.dark);
-                        } else {
-                          themeNotifier.setTheme(ThemeMode.light);
-                        }
-                      },
-                    ),
-                  ]),
+                  child: actionButtons(context),
                 ),
               ),
             ),
@@ -60,5 +42,26 @@ class ParkingAdminLayout extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Column actionButtons(BuildContext context) {
+    return Column(children: [
+      IconButton(
+        icon: const Icon(Icons.person),
+        onPressed: () => context.read<AuthBloc>().add(AuthLogoutEvent()),
+      ),
+      IconButton(
+        icon: const Icon(Icons.brightness_6),
+        onPressed: () {
+          ThemeNotifier themeNotifier =
+              Provider.of<ThemeNotifier>(context, listen: false);
+          if (themeNotifier.themeMode == ThemeMode.light) {
+            themeNotifier.setTheme(ThemeMode.dark);
+          } else {
+            themeNotifier.setTheme(ThemeMode.light);
+          }
+        },
+      ),
+    ]);
   }
 }

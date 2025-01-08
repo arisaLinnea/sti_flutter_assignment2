@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:parking_user/blocs/auth/auth_bloc.dart';
+import 'package:parking_user/utils/utils.dart';
 import 'package:parking_user/widgets/free_lots_widget.dart';
 import 'package:parking_user/widgets/parking_widget.dart';
 import 'package:shared/shared.dart';
@@ -39,18 +40,10 @@ class _ParkingViewState extends State<ParkingView> {
           BlocListener<ParkingBloc, ParkingState>(
             listener: (context, parkingState) {
               if (parkingState is ParkingFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(parkingState.error),
-                  ),
-                );
+                Utils.toastMessage(parkingState.error);
               }
               if (parkingState is ParkingSuccess) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(parkingState.message),
-                  ),
-                );
+                Utils.toastMessage(parkingState.message);
               }
               if (parkingState is ParkingLoaded) {
                 context.read<ParkingLotBloc>().add(LoadParkingLotsEvent());

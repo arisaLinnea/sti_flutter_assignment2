@@ -26,7 +26,7 @@ class UserRegBloc extends Bloc<UserRegEvent, UserRegState> {
   Future<void> _handleRegisterToState(
       UserRegisterEvent event, Emitter<UserRegState> emit) async {
     emit(UserRegLoadingState());
-    Owner newOwner = Owner(id: '123', name: event.name, ssn: event.ssn);
+    Owner newOwner = Owner(name: event.name, ssn: event.ssn);
     String? uuid = await ownerRepository.addToList(item: newOwner);
     if (uuid != null) {
       UserLogin newLoginUser = UserLogin(

@@ -94,7 +94,7 @@ void main() {
             .thenAnswer((_) async => [newParkinglot]);
         return parkingLotBloc;
       },
-      act: (bloc) => bloc.add(RemoveParkingLotEvent(lotId: lotId)),
+      act: (bloc) => bloc.add(RemoveParkingLotEvent(lotId: mockLotId)),
       expect: () => [
         ParkingLotLoading(),
         ParkingLotSuccess('Parking lot removed successfully'),
@@ -102,7 +102,7 @@ void main() {
         ParkingLotLoaded(parkingLots: [newParkinglot]),
       ],
       verify: (_) {
-        verify(() => mockParkingLotRepository.remove(id: lotId)).called(1);
+        verify(() => mockParkingLotRepository.remove(id: mockLotId)).called(1);
         verify(() => mockParkingLotRepository.getList()).called(1);
       },
     );
@@ -115,13 +115,14 @@ void main() {
               .thenAnswer((_) async => false);
           return parkingLotBloc;
         },
-        act: (bloc) => bloc.add(RemoveParkingLotEvent(lotId: lotId)),
+        act: (bloc) => bloc.add(RemoveParkingLotEvent(lotId: mockLotId)),
         expect: () => [
               ParkingLotLoading(),
               ParkingLotFailure('Failed to remove parking lot'),
             ],
         verify: (_) {
-          verify(() => mockParkingLotRepository.remove(id: lotId)).called(1);
+          verify(() => mockParkingLotRepository.remove(id: mockLotId))
+              .called(1);
           verifyNever(() => mockParkingLotRepository.getList());
         });
 
@@ -132,13 +133,13 @@ void main() {
             .thenThrow(Exception('Remove Parking Lot Failed'));
         return parkingLotBloc;
       },
-      act: (bloc) => bloc.add(RemoveParkingLotEvent(lotId: lotId)),
+      act: (bloc) => bloc.add(RemoveParkingLotEvent(lotId: mockLotId)),
       expect: () => [
         ParkingLotLoading(),
         ParkingLotFailure('Exception: Remove Parking Lot Failed'),
       ],
       verify: (_) {
-        verify(() => mockParkingLotRepository.remove(id: lotId)).called(1);
+        verify(() => mockParkingLotRepository.remove(id: mockLotId)).called(1);
         verifyNever(() => mockParkingLotRepository.getList());
       },
     );

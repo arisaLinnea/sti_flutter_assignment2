@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:parking_admin/utils/utils.dart';
 import 'package:parking_admin/widgets/parking_lot_widget.dart';
 import 'package:shared_client/shared_client.dart';
 
@@ -28,18 +29,10 @@ class _ParkingLotViewState extends State<ParkingLotView> {
       body: BlocListener<ParkingLotBloc, ParkingLotState>(
           listener: (context, state) {
         if (state is ParkingLotSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-            ),
-          );
+          Utils().showSnackBar(context, state.message);
         }
         if (state is ParkingLotFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.error),
-            ),
-          );
+          Utils().showSnackBar(context, state.error);
         }
       }, child: BlocBuilder<ParkingLotBloc, ParkingLotState>(
               builder: (context, state) {
