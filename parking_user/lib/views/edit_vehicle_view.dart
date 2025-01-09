@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:parking_user/blocs/auth/auth_bloc.dart';
 import 'package:parking_user/blocs/vehicle/vehicle_bloc.dart';
-import 'package:parking_user/utils/utils.dart';
 import 'package:shared/shared.dart';
 
 class EditVehicleView extends StatelessWidget {
@@ -22,11 +21,7 @@ class EditVehicleView extends StatelessWidget {
     CarBrand type = vehicle.type;
     return BlocListener<VehicleBloc, VehicleState>(
         listener: (context, state) {
-          if (state is VehicleFailure) {
-            Utils.toastMessage(state.error);
-          }
           if (state is VehicleSuccess) {
-            Utils.toastMessage(state.message);
             context.pop();
           }
         },

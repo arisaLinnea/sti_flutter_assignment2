@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart' as intl;
-import 'package:parking_admin/layout/parking_admin_layout.dart';
 import 'package:parking_admin/utils/utils.dart';
 import 'package:shared/shared.dart';
 import 'package:shared_client/shared_client.dart';
@@ -36,12 +35,7 @@ class _ParkingLotViewState extends State<EditParkingLotView> {
   Widget build(BuildContext context) {
     return BlocListener<ParkingLotBloc, ParkingLotState>(
         listener: (context, state) {
-          if (state is ParkingLotFailure) {
-            Utils().showSnackBar(context, state.error);
-          }
           if (state is ParkingLotSuccess) {
-            Utils().showSnackBar(context, state.message);
-
             context.pop();
           }
         },
@@ -68,18 +62,6 @@ class _ParkingLotViewState extends State<EditParkingLotView> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   ...[
-                                    // TextFormField(
-                                    //   decoration: const InputDecoration(
-                                    //     filled: true,
-                                    //     labelText: 'Street',
-                                    //   ),
-                                    //   initialValue: parkingLot?.address?.street,
-                                    //   onChanged: (value) {
-                                    //     setState(() {
-                                    //       street = value;
-                                    //     });
-                                    //   },
-                                    // ),
                                     parkingFormEditTextField(
                                         label: 'Street',
                                         initialValue:
@@ -89,19 +71,6 @@ class _ParkingLotViewState extends State<EditParkingLotView> {
                                             street = value;
                                           });
                                         }),
-                                    // TextFormField(
-                                    //   decoration: const InputDecoration(
-                                    //     filled: true,
-                                    //     labelText: 'ZipCode',
-                                    //   ),
-                                    //   initialValue:
-                                    //       parkingLot?.address?.zipCode,
-                                    //   onChanged: (value) {
-                                    //     setState(() {
-                                    //       zipcode = value;
-                                    //     });
-                                    //   },
-                                    // ),
                                     parkingFormEditTextField(
                                         label: 'ZipCode',
                                         initialValue:
@@ -111,18 +80,6 @@ class _ParkingLotViewState extends State<EditParkingLotView> {
                                             zipcode = value;
                                           });
                                         }),
-                                    // TextFormField(
-                                    //   decoration: const InputDecoration(
-                                    //     filled: true,
-                                    //     labelText: 'City',
-                                    //   ),
-                                    //   initialValue: parkingLot?.address?.city,
-                                    //   onChanged: (value) {
-                                    //     setState(() {
-                                    //       city = value;
-                                    //     });
-                                    //   },
-                                    // ),
                                     parkingFormEditTextField(
                                         label: 'City',
                                         initialValue: parkingLot?.address?.city,

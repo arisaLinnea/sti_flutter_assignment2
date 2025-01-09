@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:parking_user/blocs/vehicle/vehicle_bloc.dart';
-import 'package:parking_user/utils/utils.dart';
 import 'package:shared/shared.dart';
-import 'package:shared_client/shared_client.dart';
 
 class VehicleWidget extends StatelessWidget {
   const VehicleWidget({super.key, required this.item, required this.number});

@@ -25,7 +25,6 @@ Changes since previous version/assignment:
 - Replaced providers with BLoC (see section about BLoC)
 - Test for all BLoCs
 - Some new editing options. It's now possible to edit a Vehicle in the user application, and edit Parking lot in the admin application.
--
 
 ## 2.1 BLoCs
 

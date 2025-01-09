@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:parking_admin/widgets/parking_widget.dart';
-import 'package:shared/shared.dart';
 import 'package:shared_client/shared_client.dart';
 
 class ParkingView extends StatefulWidget {
